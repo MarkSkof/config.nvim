@@ -99,12 +99,21 @@ do
   vim.g.maplocalleader = ' '
 
   -- Set to true if you have a Nerd Font installed and selected in the terminal
-  vim.g.have_nerd_font = false
+  vim.g.have_nerd_font = true
 
   -- [[ Setting options ]]
   --  See `:help vim.o`
   -- NOTE: You can change these options as you wish!
   --  For more options, you can see `:help option-list`
+
+  -- Dictates the width used to display an actual tabulation character
+  vim.o.tabstop = 4
+
+  -- How wide an indentation is supposed to span. If 0 it uses value of tabstop
+  vim.o.softtabstop = 0
+
+  -- Width used for shifting commands. If 0 it uses value of tabstop
+  vim.o.shiftwidth = 0
 
   -- Make line numbers default
   vim.o.number = true
@@ -239,6 +248,9 @@ do
   -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
   -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
   -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
+
+  vim.keymap.set('n', '<X1Mouse>', '<C-o>', { desc = 'Jump to previous cursor position' })
+  vim.keymap.set('n', '<X2Mouse>', '<C-i>', { desc = 'Jump to next cursor position' })
 
   -- [[ Basic Autocommands ]]
   --  See `:help lua-guide-autocommands`
@@ -769,8 +781,8 @@ do
     vim.lsp.enable(name)
   end
 
-  require("mason-lspconfig").setup {
-    automatic_enable = true
+  require('mason-lspconfig').setup {
+    automatic_enable = true,
   }
 end
 
@@ -970,12 +982,12 @@ do
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug'
+  require 'kickstart.plugins.debug'
   require 'kickstart.plugins.indent_line'
   -- require 'kickstart.plugins.lint'
   -- require 'kickstart.plugins.autopairs'
   -- require 'kickstart.plugins.neo-tree'
-  -- require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
+  require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
 
   -- NOTE: You can add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --
