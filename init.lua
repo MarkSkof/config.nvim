@@ -759,7 +759,14 @@ do
     gh 'WhoIsSethDaniel/mason-tool-installer.nvim',
   }
 
-  -- Automatically install LSPs and related tools to stdpath for Neovim
+
+local lspconfig = require('lspconfig')
+
+local mason_path = vim.fn.stdpath('data') .. '/mason/'
+local workspace_dir = vim.fn.stdpath('data') .. '/site/java/workspace-' .. vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
+
+
+
   require('mason').setup {}
 
   -- Ensure the servers and tools above are installed
@@ -814,10 +821,11 @@ do
     formatters_by_ft = {
       -- rust = { 'rustfmt' },
       -- Conform can also run multiple formatters sequentially
-      -- python = { "isort", "black" },
+      python = { 'isort', 'black' },
       --
       -- You can use 'stop_after_first' to run the first available formatter from the list
-      -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      javascript = { 'prettierd', 'prettier', stop_after_first = true },
+      xml = { 'xmlformat' },
     },
   }
 
@@ -997,3 +1005,26 @@ end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+
+
+vim.lsp.config('jdtls', {
+  -- jdtls itself needs Java 21+ to run; only set JAVA_HOME for this
+  -- spawned process, so the system-wide `java`/JAVA_HOME stay on 17.
+  cmd_env = {
+    JAVA_HOME = '/usr/lib/jvm/jdk-22.0.2',
+  },
+  settings = {
+    java = {
+      configuration = {
+        runtimes = {
+          {
+            name = "JavaSE-17",
+            path = "/usr/lib/jvm/java-17-openjdk-amd64",
+            default = true,
+          },
+        },
+      },
+    },
+  },
+})

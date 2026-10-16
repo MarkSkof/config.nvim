@@ -32,16 +32,29 @@ require('mason-nvim-dap').setup {
   -- Makes a best effort to setup the various debuggers with
   -- reasonable debug configurations
   automatic_installation = true,
-
-  -- You can provide additional configuration to the handlers,
-  -- see mason-nvim-dap README for more information
-  handlers = {},
-
   -- You'll need to check that you have the required things installed
   -- online, please don't ask me how to install them :)
   ensure_installed = {
     -- Update this to ensure that you have the debuggers for the langs you want
     'delve',
+  },
+  -- You can provide additional configuration to the handlers,
+  -- see mason-nvim-dap README for more information
+  handlers = {
+    -- Use default config from mason-nvim-dap for servers that don't have configuration specified 
+    function(config) require('mason-nvim-dap').default_setup(config) end,
+
+    python = function(config)
+      table.insert(config.configurations, {
+        type = 'python',
+        request = 'launch',
+        name = 'Launch file with arguments',
+        program = '${file}',
+        args = function() return require('dap.utils').splitstr(vim.fn.input 'Arguments: ') end,
+        console = 'integratedTerminal',
+      })
+      require('mason-nvim-dap').default_setup(config)
+    end,
   },
 }
 
